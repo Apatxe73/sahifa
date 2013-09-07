@@ -2363,3 +2363,18 @@ div.pp_default .pp_details,div.light_rounded .pp_details,div.dark_rounded .pp_de
 	.author-info img.author-img {margin: 0 auto 15px;display: block;max-width: 70px;float: none;}
 	.author-info-content {padding-left: 0;padding-right: 0;}
 }
+
+/***************************************
+ E2E 06.04.13 RaBe-Ticker
+ #Achtung bei Update gehen diese Reglen verloren
+/****************************************/
+.ticker {
+	text-align: center;
+}
+.ticker .show {
+	font-weight: bold;
+	
+/***************************************
+ E2E 10.04.13 Contact-Form responsive
+ #Achtung bei Update gehen diese Reglen verloren
+/****************************************/
