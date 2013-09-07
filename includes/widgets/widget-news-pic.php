@@ -23,7 +23,7 @@ class news_pic extends WP_Widget {
 			echo $before_title;
 			echo $title ; ?>
 		<?php echo $after_title; ?>
-				<?php wp_last_news_pic($posts_order , $no_of_posts , $cats_id)?>	
+				<?php tie_last_news_pic($posts_order , $no_of_posts , $cats_id)?>	
 		<div class="clear"></div>
 	<?php 
 		echo $after_widget;

@@ -40,7 +40,7 @@ Template Name: Restrict Page Require a Login
 					<?php the_content(); ?>
 					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'tie' ), 'after' => '</div>' ) ); ?>		
 				<?php } else { ?>
-					<?php _e( 'Du musst ', 'tie' ); ?><a href="<?php echo home_url(); ?>/wp-login.php"><?php _e( 'eingeloggt sein,', 'tie' ); ?></a><?php _e( ' um diese Seite zu sehen.<br><a href="http://www.rabe.ch/sendungen/sendung-supporten.html"><u>Supporter</u></a> von End2End erhalten ein Login', 'tie' ); ?>
+					<?php _e( 'You must be ', 'tie' ); ?><a href="<?php echo home_url(); ?>/wp-login.php"><?php _e( 'logged in', 'tie' ); ?></a><?php _e( ' to view this page.', 'tie' ); ?>
 				<?php } ?>
 				<?php tie_login_form( $login_only = true ); ?>
 					<?php edit_post_link( __( 'Edit', 'tie' ), '<span class="edit-link">', '</span>' ); ?>

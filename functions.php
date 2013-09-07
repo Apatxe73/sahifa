@@ -17,8 +17,7 @@ $docs_url = "http://themes.tielabs.com/docs/".$themefolder;
 define( 'MTHEME_NOTIFIER_THEME_NAME', $themename );
 define( 'MTHEME_NOTIFIER_THEME_FOLDER_NAME', $themefolder );
 define( 'MTHEME_NOTIFIER_XML_FILE', $notifier_url );
-define( 'MTHEME_NOTIFIER_CACHE_INTERVAL', 1 );
-
+define( 'MTHEME_NOTIFIER_CACHE_INTERVAL', 43200 );
 
 // Custom Functions 
 include (TEMPLATEPATH . '/custom-functions.php');

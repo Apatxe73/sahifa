@@ -1,12 +1,12 @@
 <?php
 
-add_action( 'widgets_init', 'video_widget_box' );
-function video_widget_box() {
-	register_widget( 'video_widget' );
+add_action( 'widgets_init', 'tie_video_widget_box' );
+function tie_video_widget_box() {
+	register_widget( 'tie_video_widget' );
 }
-class video_widget extends WP_Widget {
+class tie_video_widget extends WP_Widget {
 
-	function video_widget() {
+	function tie_video_widget() {
 		$widget_ops = array( 'classname' => 'video-widget', 'description' => ''  );
 		$control_ops = array( 'width' => 250, 'height' => 350, 'id_base' => 'video-widget' );
 		$this->WP_Widget( 'video-widget',theme_name .' - Video', $widget_ops, $control_ops );

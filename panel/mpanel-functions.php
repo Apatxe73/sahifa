@@ -188,6 +188,7 @@ function tie_save_settings ( $data , $refresh = 0 ) {
 		}		
 	}
 	delete_transient('list_tweets');
+	delete_transient('twitter_count');
 
 	if( $refresh == 2 )  die('2');
 	elseif( $refresh == 1 )	die('1');

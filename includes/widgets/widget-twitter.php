@@ -83,10 +83,8 @@ class Latest_Tweets extends WP_Widget {
 ';
             	}
 				else{ 
-					$error_msg = (array) $error[0];
-					$error_msg = $error_msg['message'];
-					echo '<p style="display:block; padding: 5px; font-weight:bold; clear:both; background: rgb(255, 157, 157);">Twiiter API : '.$error_msg.'</p>';
-				}
+					?> <a href="http://twitter.com/<?php echo $twitter_username  ?>"><?php echo $title ; ?></a> 
+<?php			}
             ?>
 		<?php
 		/* After widget (defined by themes). */
@@ -97,7 +95,7 @@ class Latest_Tweets extends WP_Widget {
 		echo $before_title; ?>
 			<a href="http://twitter.com/<?php echo $twitter_username  ?>"><?php echo $title ; ?></a>
 		<?php echo $after_title; 
-		echo ' You need to Setup Twitter API OAuth settings under Tiepanel > Advanced tab ';
+		echo 'Setup Twitter API OAuth settings under Tiepanel > Advanced tab ';
 		echo $after_widget;
 	}
 }
@@ -115,9 +113,18 @@ class Latest_Tweets extends WP_Widget {
 
 	function form( $instance ) {
 		$defaults = array( 'title' =>__('@Follow Me' , 'tie') , 'no_of_tweets' => '5' );
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
-		<p><em style="color:red;">Make sure you Setup Twitter API OAuth settings under Tiepanel > Advanced tab</em></p>
-
+		$instance = wp_parse_args( (array) $instance, $defaults ); 
+		
+		$twitter_username 		= tie_get_option('twitter_username');
+		$consumer_key 			= tie_get_option('twitter_consumer_key');
+		$consumer_secret		= tie_get_option('twitter_consumer_secret');
+		$access_token 			= tie_get_option('twitter_access_token');
+		$access_token_secret 	= tie_get_option('twitter_access_token_secret');
+		
+		if( empty($twitter_username) && empty($consumer_key) && empty($consumer_secret) && empty($access_token) && empty($access_token_secret)  )
+				echo '<p style="display:block; padding: 5px; font-weight:bold; clear:both; background: rgb(255, 157, 157);">Error : Setup Twitter API OAuth settings under Tiepanel > Advanced tab .</p>';
+		
+		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title : </label>
 			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" class="widefat" type="text" />

@@ -77,6 +77,9 @@ if( $get_meta['tie_post_head'][0] != 'none' ):
 		<div class="single-post-thumb">
 			<?php tie_thumb('', $width , $height ); ?>
 		</div>
+		<?php $thumb_caption = get_post(get_post_thumbnail_id())->post_excerpt;
+			if( !empty($thumb_caption) ){ ?><div class="single-post-caption"><?php echo $thumb_caption ?></div> <?php } ?>
+
 		
 <?php }elseif( $get_meta['tie_post_head'][0] == 'lightbox' && has_post_thumbnail($post->ID)){
 
@@ -94,7 +97,9 @@ if( $get_meta['tie_post_head'][0] != 'none' ):
 		<div class="single-post-thumb head-lightbox">
 			<a href="<?php echo $image_url; ?>" rel="prettyPhoto"><?php tie_thumb('', $width , $height ); ?></a>
 		</div>
-		
+		<?php $thumb_caption = get_post(get_post_thumbnail_id())->post_excerpt;
+			if( !empty($thumb_caption) ){ ?><div class="single-post-caption"><?php echo $thumb_caption ?></div> <?php } ?>
+			
 <?php } elseif( $get_meta['tie_post_head'][0] == 'map' && !empty( $get_meta['tie_googlemap_url'][0] ) ){
 		if( $get_meta["tie_sidebar_pos"][0] == 'full' ){
 			$width = 1003 ;

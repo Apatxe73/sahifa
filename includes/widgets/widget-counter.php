@@ -112,6 +112,13 @@ class counter_widget extends WP_Widget {
 		$instance['youtube'] = $new_instance['youtube'] ;
 		$instance['vimeo'] =  $new_instance['vimeo'] ;
 		$instance['dribbble'] =  $new_instance['dribbble'] ;
+		
+		delete_transient('fans_count');
+		delete_transient('twitter_count');
+		delete_transient('youtube_count');
+		delete_transient('vimeo_count');
+		delete_transient('dribbble_count');
+
 		return $instance;
 	}
 
@@ -121,34 +128,44 @@ class counter_widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>">Open links in a new window:</label>
 			<input id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="true" <?php if( $instance['new_window'] ) echo 'checked="checked"'; ?> type="checkbox" />
 		</p>
-		<p>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
 			<label for="<?php echo $this->get_field_id( 'rss' ); ?>">Feed URL : </label>
 			<input id="<?php echo $this->get_field_id( 'rss' ); ?>" name="<?php echo $this->get_field_name( 'rss' ); ?>" value="<?php echo $instance['rss']; ?>" class="widefat" type="text" />
 		</p>
-		<p>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
 			<label for="<?php echo $this->get_field_id( 'facebook' ); ?>">Facebook Page URL : </label>
 			<input id="<?php echo $this->get_field_id( 'facebook' ); ?>" name="<?php echo $this->get_field_name( 'facebook' ); ?>" value="<?php echo $instance['facebook']; ?>" class="widefat" type="text" />
-			<small>Link must be like http://www.facebook.com/username/ or http://www.facebook.com/PageID/</small>
+			<small>Link must be like http://www.facebook.com/PageName/ or http://www.facebook.com/PageID/</small>
 
 		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'twitter' ); ?>">Enable Twitter : </label>
+		<?php
+		$twitter_username 		= tie_get_option('twitter_username');
+		$consumer_key 			= tie_get_option('twitter_consumer_key');
+		$consumer_secret		= tie_get_option('twitter_consumer_secret');
+		$access_token 			= tie_get_option('twitter_access_token');
+		$access_token_secret 	= tie_get_option('twitter_access_token_secret');
+		
+		if( empty($twitter_username) && empty($consumer_key) && empty($consumer_secret) && empty($access_token) && empty($access_token_secret)  )
+				echo '<p style="display:block; padding: 5px; font-weight:bold; clear:both; background: rgb(255, 157, 157);">Error : Setup Twitter API OAuth settings under Tiepanel > Advanced tab .</p>';
+		
+		?>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
+			<label for="<?php echo $this->get_field_id( 'twitter' ); ?>">Enable Twitter Followers Counter: </label>
 			<input id="<?php echo $this->get_field_id( 'twitter' ); ?>" name="<?php echo $this->get_field_name( 'twitter' ); ?>"  value="true" <?php if( $instance['twitter'] ) echo 'checked="checked"'; ?> type="checkbox"  />
-			<small><em style="color:red;">Make sure you Setup Twitter API OAuth settings under Tiepanel > Advanced tab</em></small>
 		</p>
-		<p>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
 			<label for="<?php echo $this->get_field_id( 'youtube' ); ?>">Youtube Channel URL : </label>
 			<input id="<?php echo $this->get_field_id( 'youtube' ); ?>" name="<?php echo $this->get_field_name( 'youtube' ); ?>" value="<?php echo $instance['youtube']; ?>" class="widefat" type="text" />
 			<small>Link must be like http://www.youtube.com/user/username </small>
 
 		</p>
-		<p>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
 			<label for="<?php echo $this->get_field_id( 'vimeo' ); ?>">Vimeo Channel URL : </label>
 			<input id="<?php echo $this->get_field_id( 'vimeo' ); ?>" name="<?php echo $this->get_field_name( 'vimeo' ); ?>" value="<?php echo $instance['vimeo']; ?>" class="widefat" type="text" />
 			<small>Link must be like http://vimeo.com/channels/username </small>
 
 		</p>
-		<p>
+		<p style="border-bottom: 1px solid #DDD;padding-bottom: 10px;">
 			<label for="<?php echo $this->get_field_id( 'dribbble' ); ?>">dribbble Page URL : </label>
 			<input id="<?php echo $this->get_field_id( 'dribbble' ); ?>" name="<?php echo $this->get_field_name( 'dribbble' ); ?>" value="<?php echo $instance['dribbble']; ?>" class="widefat" type="text" />
 			<small>Link must be like http://dribbble.com/username</small>

@@ -29,16 +29,24 @@ Author URI: http://lesterchan.net
 
 
 ### Function: Page Navigation: Boxed Style Paging
-function tie_get_pagenavi($before = '', $after = '') {
+function tie_get_pagenavi($query = false, $num = false , $before = '', $after = '') {
 	global $wpdb, $wp_query;
 	$pagenavi_options = tie_pagenavi_init(); 
 	
 	if (!is_single()) {
-		$request = $wp_query->request;
-		$posts_per_page = intval(get_query_var('posts_per_page'));
+		if( !empty($query) ){
+			$request = $query->request;
+			$numposts = $query->found_posts;
+			$max_page = $query->max_num_pages;
+			$posts_per_page = intval($num);
+		}else{
+			$request = $wp_query->request;
+			$numposts = $wp_query->found_posts;
+			$max_page = $wp_query->max_num_pages;
+			$posts_per_page = intval(get_query_var('posts_per_page'));
+		}
 		$paged = intval(get_query_var('paged'));
-		$numposts = $wp_query->found_posts;
-		$max_page = $wp_query->max_num_pages;
+
 		if(empty($paged) || $paged == 0) {
 			$paged = 1;
 		}
@@ -112,7 +120,13 @@ function tie_get_pagenavi($before = '', $after = '') {
 							echo '<a href="'.esc_url(get_pagenum_link($i)).'" class="page" title="'.$page_text.'">'.$page_text.'</a>';
 						}
 					}
-					next_posts_link($pagenavi_options['next_text'], $max_page);
+					if( empty($query) ){ ?>
+					<span id="tie-next-page">
+					<?php } next_posts_link($pagenavi_options['next_text'], $max_page);
+					if( empty($query) ){?>
+					</span>
+					<?php
+					}
 					if($larger_page_to_show > 0 && $larger_end_page_start < $max_page) {
 						for($i = $larger_end_page_start; $i <= $larger_end_page_end; $i+=$larger_page_multiple) {
 							$page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($i), $pagenavi_options['page_text']);

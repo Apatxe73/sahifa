@@ -26,16 +26,16 @@ class posts_list extends WP_Widget {
 				<ul>
 					<?php
 					if( $posts_order == 'popular' )
-						wp_popular_posts($no_of_posts , $thumb);
+						tie_popular_posts($no_of_posts , $thumb);
 						
 					elseif( $posts_order == 'random' )
-						wp_random_posts($no_of_posts , $thumb);
+						tie_random_posts($no_of_posts , $thumb);
 						
 					elseif( $posts_order == 'best' )
 						tie_best_reviews_posts($no_of_posts , $thumb);
 						
 					else
-						wp_last_posts($no_of_posts , $thumb)?>	
+						tie_last_posts($no_of_posts , $thumb)?>	
 				</ul>
 		<div class="clear"></div>
 	<?php 

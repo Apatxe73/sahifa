@@ -443,8 +443,7 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
 .del-cat {
 	background: url(images/trash.png) no-repeat top;
 	display: block;
-	text-indent: -99999999px;
-	overflow: hidden;
+	z-index:99999;
 	width: 16px;
 	height: 16px;
 	float: right;

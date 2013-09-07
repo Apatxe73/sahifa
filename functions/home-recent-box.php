@@ -8,8 +8,12 @@ function get_home_recent( $cat_data ){
 	$Posts = $cat_data['number'];
 	$Box_Title = $cat_data['title'];
 	$display = $cat_data['display'];
+	$pagination = $cat_data['pagi'];
 	
-	$cat_query = new WP_Query(array ( 'posts_per_page' => $Posts , 'category__not_in' => $exclude)); 
+	$args = array ( 'posts_per_page' => $Posts , 'category__not_in' => $exclude  );
+	if ( !empty( $pagination ) && $pagination == 'y' ) $args[ 'paged' ] = get_query_var('paged');
+	
+	$cat_query = new WP_Query( $args ); 
 ?>
 		<section class="cat-box recent-box">
 			<div class="cat-box-title">
@@ -76,9 +80,8 @@ function get_home_recent( $cat_data ){
 			<?php endif; ?>
 			</div><!-- .cat-box-content /-->
 		</section>
+		<?php if ( !empty( $pagination ) && $pagination == 'y' && $cat_query->max_num_pages > 1){?> <div class="recent-box-pagination"><?php tie_pagenavi($cat_query , $Posts); ?> </div> <?php } ?>
 		<div class="clear"></div>
-
-
 <?php
 }
 ?>

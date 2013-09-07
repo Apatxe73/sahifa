@@ -24,7 +24,7 @@ class comments_avatar extends WP_Widget {
 			echo $title ; ?>
 		<?php echo $after_title; ?>
 			<ul>	
-		<?php most_commented( $no_of_comments , $avatar_size); ?>
+		<?php tie_most_commented( $no_of_comments , $avatar_size); ?>
 		</ul>
 	<?php 
 		echo $after_widget;

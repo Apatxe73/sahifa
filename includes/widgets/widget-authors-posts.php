@@ -24,7 +24,7 @@ class authors_posts extends WP_Widget {
 			echo $title ; ?>
 		<?php echo $after_title; ?>
 				<ul>
-					<?php wp_last_posts_cat_authors($no_of_posts , $thumb , $cats_id)?>	
+					<?php tie_last_posts_cat_authors($no_of_posts , $thumb , $cats_id)?>	
 				</ul>
 		<div class="clear"></div>
 	<?php 

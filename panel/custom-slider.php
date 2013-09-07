@@ -80,7 +80,7 @@ function tie_slider_slides(){
 					id = classes.replace(/(.*?)wp-image-/, '');
 			}
 				
-			jQuery('#tie-slider-items').append('<li id="listItem_'+ nextCell +'" class="ui-state-default"><div class="widget-content option-item"><div class="slider-img"><img src="'+imgurl+'" alt=""></div><label for="custom_slider['+ nextCell +'][title]"><span>Slide Title :</span><input id="custom_slider['+ nextCell +'][title]" name="custom_slider['+ nextCell +'][title]" value="" type="text" /></label><label for="custom_slider['+ nextCell +'][link]"><span>Slide Link :</span><input id="custom_slider['+ nextCell +'][link]" name="custom_slider['+ nextCell +'][link]" value="" type="text" /></label><label for="custom_slider['+ nextCell +'][caption]"><span style="float:left" >Slide Caption :</span><textarea name="custom_slider['+ nextCell +'][caption]" id="custom_slider['+ nextCell +'][caption]"></textarea></label><input id="custom_slider['+ nextCell +'][id]" name="custom_slider['+ nextCell +'][id]" value="'+id+'" type="hidden" /><a class="del-cat">Delete</a></div></li>');
+			jQuery('#tie-slider-items').append('<li id="listItem_'+ nextCell +'" class="ui-state-default"><div class="widget-content option-item"><div class="slider-img"><img src="'+imgurl+'" alt=""></div><label for="custom_slider['+ nextCell +'][title]"><span>Slide Title :</span><input id="custom_slider['+ nextCell +'][title]" name="custom_slider['+ nextCell +'][title]" value="" type="text" /></label><label for="custom_slider['+ nextCell +'][link]"><span>Slide Link :</span><input id="custom_slider['+ nextCell +'][link]" name="custom_slider['+ nextCell +'][link]" value="" type="text" /></label><label for="custom_slider['+ nextCell +'][caption]"><span style="float:left" >Slide Caption :</span><textarea name="custom_slider['+ nextCell +'][caption]" id="custom_slider['+ nextCell +'][caption]"></textarea></label><input id="custom_slider['+ nextCell +'][id]" name="custom_slider['+ nextCell +'][id]" value="'+id+'" type="hidden" /><a class="del-cat"></a></div></li>');
 			nextCell ++ ;
 			tb_remove();
 			window.send_to_editor = window.restore_send_to_editor;
@@ -108,7 +108,7 @@ function tie_slider_slides(){
 				<label for="custom_slider[<?php echo $i ?>][link]"><span>Slide Link :</span><input id="custom_slider[<?php echo $i ?>][link]" name="custom_slider[<?php echo $i ?>][link]" value="<?php  echo stripslashes( $slide['link'] )  ?>" type="text" /></label>
 				<label for="custom_slider[<?php echo $i ?>][caption]"><span style="float:left" >Slide Caption :</span><textarea name="custom_slider[<?php echo $i ?>][caption]" id="custom_slider[<?php echo $i ?>][caption]"><?php echo stripslashes($slide['caption']) ; ?></textarea></label>
 				<input id="custom_slider[<?php echo $i ?>][id]" name="custom_slider[<?php echo $i ?>][id]" value="<?php  echo $slide['id']  ?>" type="hidden" />
-				<a class="del-cat">Delete</a>
+				<a class="del-cat"></a>
 			</div>
 		</li>
 	<?php endforeach; 

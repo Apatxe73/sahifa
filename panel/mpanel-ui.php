@@ -348,7 +348,7 @@ $save='
 				?>
 			</div>	
 			
-		<div id="Home_Builder">
+		<div id="Home_Builder" style="width:100%;">
 
 			<div class="tiepanel-item">
 				<h3>First News Excerpt Length</h3>
@@ -446,6 +446,12 @@ $save='
 												<select id="tie_home_cats[<?php echo $i ?>][display]" name="tie_home_cats[<?php echo $i ?>][display]">
 													<option value="default" <?php if ( $cat['display'] == 'default') { echo ' selected="selected"' ; } ?>>Default Style</option>
 													<option value="blog" <?php if ( $cat['display'] == 'blog') { echo ' selected="selected"' ; } ?>>Blog Style</option>
+												</select>
+											</label>
+											<label for="tie_home_cats[<?php echo $i ?>][pagi]"><span>Show Pagination:</span>
+												<select id="tie_home_cats[<?php echo $i ?>][pagi]" name="tie_home_cats[<?php echo $i ?>][pagi]">
+													<option value="n" <?php if ( $cat['pagi'] == 'n') { echo ' selected="selected"' ; } ?>>No</option>
+													<option value="y" <?php if ( $cat['pagi'] == 'y') { echo ' selected="selected"' ; } ?>>Yes</option>
 												</select>
 											</label>
 

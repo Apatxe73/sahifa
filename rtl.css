@@ -94,6 +94,7 @@ p.post-meta span{margin-right:0;margin-left:10px;}
 #commentform input[type="checkbox"]{margin: 2px 0 0 7px ;float:right;clear:right;}
 .entry li {margin: 0 10px 5px 0;}
 .share-post li, .mini-share-post li {float: right;}
+html body iframe[name*="oauth2relay"]{ display: none; right: -100px; }
 
 @media only screen and (max-width: 985px) and (min-width: 768px) { 
     #footer-second, #footer-fourth { margin-left: 0 !important }

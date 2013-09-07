@@ -23,17 +23,17 @@ class widget_tabs extends WP_Widget {
 			</div>
 			<div id="tab1" class="tabs-wrap">
 				<ul>
-					<?php wp_popular_posts() ?>	
+					<?php tie_popular_posts() ?>	
 				</ul>
 			</div>
 			<div id="tab2" class="tabs-wrap">
 				<ul>
-					<?php wp_last_posts()?>	
+					<?php tie_last_posts()?>	
 				</ul>
 			</div>
 			<div id="tab3" class="tabs-wrap">
 				<ul>
-					<?php most_commented();?>
+					<?php tie_most_commented();?>
 				</ul>
 			</div>
 			<div id="tab4" class="tabs-wrap tagcloud">

@@ -519,14 +519,13 @@ add_filter('excerpt_more', 'tie_remove_excerpt');
 /*-----------------------------------------------------------------------------------*/
 # Page Navigation
 /*-----------------------------------------------------------------------------------*/
-function tie_pagenavi(){
+function tie_pagenavi( $query = false, $num = false ){
 	?>
 	<div class="pagination">
-		<?php tie_get_pagenavi() ?>
+		<?php tie_get_pagenavi( $query, $num ) ?>
 	</div>
 	<?php
 }
-
 
 
 /*-----------------------------------------------------------------------------------*/
@@ -808,7 +807,7 @@ function tie_wp_footer() {
 /*-----------------------------------------------------------------------------------*/
 # News In Picture
 /*-----------------------------------------------------------------------------------*/
-function wp_last_news_pic($order , $numberOfPosts = 12 , $cats = 1 ){
+function tie_last_news_pic($order , $numberOfPosts = 12 , $cats = 1 ){
 	global $post;
 	$orig_post = $post;
 	
@@ -834,7 +833,7 @@ function wp_last_news_pic($order , $numberOfPosts = 12 , $cats = 1 ){
 /*-----------------------------------------------------------------------------------*/
 # Get Most Racent posts
 /*-----------------------------------------------------------------------------------*/
-function wp_last_posts($numberOfPosts = 5 , $thumb = true){
+function tie_last_posts($numberOfPosts = 5 , $thumb = true){
 	global $post;
 	$orig_post = $post;
 	
@@ -858,7 +857,7 @@ function wp_last_posts($numberOfPosts = 5 , $thumb = true){
 /*-----------------------------------------------------------------------------------*/
 # Get Most Racent posts from Category
 /*-----------------------------------------------------------------------------------*/
-function wp_last_posts_cat($numberOfPosts = 5 , $thumb = true , $cats = 1){
+function tie_last_posts_cat($numberOfPosts = 5 , $thumb = true , $cats = 1){
 	global $post;
 	$orig_post = $post;
 
@@ -881,7 +880,7 @@ function wp_last_posts_cat($numberOfPosts = 5 , $thumb = true , $cats = 1){
 /*-----------------------------------------------------------------------------------*/
 # Get Most Racent posts from Category with Authors
 /*-----------------------------------------------------------------------------------*/
-function wp_last_posts_cat_authors($numberOfPosts = 5 , $thumb = true , $cats = 1){
+function tie_last_posts_cat_authors($numberOfPosts = 5 , $thumb = true , $cats = 1){
 	global $post;
 	$orig_post = $post;
 
@@ -905,7 +904,7 @@ function wp_last_posts_cat_authors($numberOfPosts = 5 , $thumb = true , $cats = 
 /*-----------------------------------------------------------------------------------*/
 # Get Random posts 
 /*-----------------------------------------------------------------------------------*/
-function wp_random_posts($numberOfPosts = 5 , $thumb = true){
+function tie_random_posts($numberOfPosts = 5 , $thumb = true){
 	global $post;
 	$orig_post = $post;
 
@@ -929,7 +928,7 @@ function wp_random_posts($numberOfPosts = 5 , $thumb = true){
 /*-----------------------------------------------------------------------------------*/
 # Get Popular posts 
 /*-----------------------------------------------------------------------------------*/
-function wp_popular_posts($pop_posts = 5 , $thumb = true){
+function tie_popular_posts($pop_posts = 5 , $thumb = true){
 	global $wpdb , $post;
 	$orig_post = $post;
 	
@@ -958,7 +957,7 @@ function wp_popular_posts($pop_posts = 5 , $thumb = true){
 /*-----------------------------------------------------------------------------------*/
 # Get Most commented posts 
 /*-----------------------------------------------------------------------------------*/
-function most_commented($comment_posts = 5 , $avatar_size = 50){
+function tie_most_commented($comment_posts = 5 , $avatar_size = 50){
 $comments = get_comments('status=approve&number='.$comment_posts);
 foreach ($comments as $comment) { ?>
 	<li>
@@ -1003,6 +1002,7 @@ function tie_curl_subscribers_text_counter( $xml_url ) {
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_URL, $xml_url);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$data = curl_exec($ch);
 		curl_close($ch);
 		return $data;
@@ -1015,38 +1015,41 @@ function tie_rss_count( $fb_id ) {
 }
 
 function tie_followers_count() {
-	try {
-		$twitter_username 		= tie_get_option('twitter_username');
-		$consumer_key 			= tie_get_option('twitter_consumer_key');
-		$consumer_secret		= tie_get_option('twitter_consumer_secret');
-		$access_token 			= tie_get_option('twitter_access_token');
-		$access_token_secret 	= tie_get_option('twitter_access_token_secret');
+	$twitter_username 		= tie_get_option('twitter_username');
+	$twitter['page_url'] = 'http://www.twitter.com/'.$twitter_username;
+	$twitter['followers_count'] = get_transient('twitter_count');
+	if( empty( $twitter['followers_count']) ){
+		try {
 		
-		$twitterConnection = new TwitterOAuth( $consumer_key , $consumer_secret , $access_token , $access_token_secret	);
-		$twitterData = $twitterConnection->get('users/show', array('screen_name' => $twitter_username));
-		$twitter['page_url'] = 'http://www.twitter.com/'.$twitter_username;
-		$twitter['followers_count'] = $twitterData->followers_count;
-		
-		if(isset($twitterData->errors)){
-			$error = $twitterData->errors;
-			$error_msg = (array) $error[0];
-			$error_msg = $error_msg['message'];
-			echo '<p style="display:block; padding: 5px; font-weight:bold; clear:both; background: rgb(255, 157, 157);">Twiiter API : '.$error_msg.'</p>';
-		}
-		
-	} catch (Exception $e) {
-		$twitter['page_url'] = 'http://www.twitter.com/'.$twitter_username;
-		$twitter['followers_count'] = 0;
-	}
-	if( !empty( $twitter['followers_count'] ) &&  get_option( 'followers_count') != $twitter['followers_count'] )
-		update_option( 'followers_count' , $twitter['followers_count'] );
-		
-	if( $twitter['followers_count'] == 0 && get_option( 'followers_count') )
-		$twitter['followers_count'] = get_option( 'followers_count');
+			$data = @json_decode(tie_curl_subscribers_text_counter("https://twitter.com/users/$twitter_username.json") , true);
+			$twitter['followers_count'] = (int) $data['followers_count'];	
 			
-	elseif( $twitter['followers_count'] == 0 && !get_option( 'followers_count') )
-		$twitter['followers_count'] = 0;
-	
+			if( empty($twitter['followers_count']) ){
+				$consumer_key 			= tie_get_option('twitter_consumer_key');
+				$consumer_secret		= tie_get_option('twitter_consumer_secret');
+				$access_token 			= tie_get_option('twitter_access_token');
+				$access_token_secret 	= tie_get_option('twitter_access_token_secret');
+				
+				$twitterConnection = new TwitterOAuth( $consumer_key , $consumer_secret , $access_token , $access_token_secret	);
+				$twitterData = $twitterConnection->get('users/show', array('screen_name' => $twitter_username));
+				$twitter['followers_count'] = $twitterData->followers_count;
+			}
+			
+		} catch (Exception $e) {
+			$twitter['followers_count'] = 0;
+		}
+		if( !empty( $twitter['followers_count'] ) ){
+			set_transient( 'twitter_count' , $twitter['followers_count'] , 1200);
+			if( get_option( 'followers_count') != $twitter['followers_count'] ) 
+				update_option( 'followers_count' , $twitter['followers_count'] );
+		}
+			
+		if( $twitter['followers_count'] == 0 && get_option( 'followers_count') )
+			$twitter['followers_count'] = get_option( 'followers_count');
+				
+		elseif( $twitter['followers_count'] == 0 && !get_option( 'followers_count') )
+			$twitter['followers_count'] = 0;
+	}
 	return $twitter;
 }
 
@@ -1054,23 +1057,28 @@ function tie_facebook_fans( $page_link ){
 	$face_link = @parse_url($page_link);
 
 	if( $face_link['host'] == 'www.facebook.com' || $face_link['host']  == 'facebook.com' ){
-		try {
-			$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 1);
-			$data = @json_decode(tie_curl_subscribers_text_counter("http://graph.facebook.com/".$page_name));
-			$fans = $data->likes;
-		} catch (Exception $e) {
-			$fans = 0;
-		}
-			
-		if( !empty($fans) && get_option( 'fans_count') != $fans )
-			update_option( 'fans_count' , $fans );
-			
-		if( $fans == 0 && get_option( 'fans_count') )
-			$fans = get_option( 'fans_count');
+		$fans = get_transient('fans_count');
+		if( empty( $fans ) ){
+			try {
+				$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 1);
+				$data = @json_decode(tie_curl_subscribers_text_counter("http://graph.facebook.com/".$page_name));
+				$fans = $data->likes;
+			} catch (Exception $e) {
+				$fans = 0;
+			}
 				
-		elseif( $fans == 0 && !get_option( 'fans_count') )
-			$fans = 0;
-			
+			if( !empty($fans) ){
+				set_transient( 'fans_count' , $fans , 1200);
+				if ( get_option( 'fans_count') != $fans )
+					update_option( 'fans_count' , $fans );
+			}
+				
+			if( $fans == 0 && get_option( 'fans_count') )
+				$fans = get_option( 'fans_count');
+					
+			elseif( $fans == 0 && !get_option( 'fans_count') )
+				$fans = 0;
+		}	
 		return $fans;
 	}
 }
@@ -1080,78 +1088,93 @@ function tie_youtube_subs( $channel_link ){
 	$youtube_link = @parse_url($channel_link);
 
 	if( $youtube_link['host'] == 'www.youtube.com' || $youtube_link['host']  == 'youtube.com' ){
-		try {
-			$youtube_name = substr(@parse_url($channel_link, PHP_URL_PATH), 6);
-			$json = @tie_curl_subscribers_text_counter("http://gdata.youtube.com/feeds/api/users/".$youtube_name."?alt=json");
-			$data = json_decode($json, true); 
-			$subs = $data['entry']['yt$statistics']['subscriberCount']; 
-		} catch (Exception $e) {
-			$subs = 0;
-		}
-		
-		if( !empty($subs) && get_option( 'youtube_count') != $subs )
-			update_option( 'youtube_count' , $subs );
+		$subs = get_transient('youtube_count');
+		if( empty( $subs ) ){
+			try {
+				$youtube_name = substr(@parse_url($channel_link, PHP_URL_PATH), 6);
+				$json = @tie_curl_subscribers_text_counter("http://gdata.youtube.com/feeds/api/users/".$youtube_name."?alt=json");
+				$data = json_decode($json, true); 
+				$subs = $data['entry']['yt$statistics']['subscriberCount']; 
+			} catch (Exception $e) {
+				$subs = 0;
+			}
 			
-		if( $subs == 0 && get_option( 'youtube_count') )
-			$subs = get_option( 'youtube_count');
+			if( !empty($subs) ){
+				set_transient( 'youtube_count' , $subs , 1200);
+				if( get_option( 'youtube_count') != $subs )
+					update_option( 'youtube_count' , $subs );
+			}
 				
-		elseif( $subs == 0 && !get_option( 'youtube_count') )
-			$subs = 0;
-			
+			if( $subs == 0 && get_option( 'youtube_count') )
+				$subs = get_option( 'youtube_count');
+					
+			elseif( $subs == 0 && !get_option( 'youtube_count') )
+				$subs = 0;
+		}
 		return $subs;
 	}
 }
 
 
 function tie_vimeo_count( $page_link ) {
-	$face_link = @parse_url($page_link);
+	$vimeo_link = @parse_url($page_link);
 
-	if( $face_link['host'] == 'www.vimeo.com' || $face_link['host']  == 'vimeo.com' ){
-		try {
-			$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 10);
-			@$data = @json_decode(tie_curl_subscribers_text_counter( 'http://vimeo.com/api/v2/channel/' . $page_name  .'/info.json'));
-		
-			$vimeo = $data->total_subscribers;
-		} catch (Exception $e) {
-			$vimeo = 0;
-		}
-
-		if( !empty($vimeo) && get_option( 'vimeo_count') != $vimeo )
-			update_option( 'vimeo_count' , $vimeo );
+	if( $vimeo_link['host'] == 'www.vimeo.com' || $vimeo_link['host']  == 'vimeo.com' ){
+		$vimeo = get_transient('vimeo_count');
+		if( empty( $vimeo ) ){
+			try {
+				$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 10);
+				@$data = @json_decode(tie_curl_subscribers_text_counter( 'http://vimeo.com/api/v2/channel/' . $page_name  .'/info.json'));
 			
-		if( $vimeo == 0 && get_option( 'vimeo_count') )
-			$vimeo = get_option( 'vimeo_count');
+				$vimeo = $data->total_subscribers;
+			} catch (Exception $e) {
+				$vimeo = 0;
+			}
+
+			if( !empty($vimeo) ){
+				set_transient( 'vimeo_count' , $vimeo , 1200);
+				if( get_option( 'vimeo_count') != $vimeo )
+					update_option( 'vimeo_count' , $vimeo );
+			}
 				
-		elseif( $vimeo == 0 && !get_option( 'vimeo_count') )
-			$vimeo = 0;
-			
+			if( $vimeo == 0 && get_option( 'vimeo_count') )
+				$vimeo = get_option( 'vimeo_count');
+					
+			elseif( $vimeo == 0 && !get_option( 'vimeo_count') )
+				$vimeo = 0;
+		}
 		return $vimeo;
 	}
 
 }
 
 function tie_dribbble_count( $page_link ) {
-	$face_link = @parse_url($page_link);
+	$dribbble_link = @parse_url($page_link);
 
-	if( $face_link['host'] == 'www.dribbble.com' || $face_link['host']  == 'dribbble.com' ){
-		try {
-			$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 1);
-			@$data = @json_decode(tie_curl_subscribers_text_counter( 'http://api.dribbble.com/' . $page_name));
-		
-			$dribbble = $data->followers_count;
-		} catch (Exception $e) {
-			$dribbble = 0;
-		}
-
-		if( !empty($dribbble) && get_option( 'dribbble_count') != $dribbble )
-			update_option( 'dribbble_count' , $dribbble );
+	if( $dribbble_link['host'] == 'www.dribbble.com' || $dribbble_link['host']  == 'dribbble.com' ){
+		$dribbble = get_transient('dribbble_count');
+		if( empty( $dribbble ) ){
+			try {
+				$page_name = substr(@parse_url($page_link, PHP_URL_PATH), 1);
+				@$data = @json_decode(tie_curl_subscribers_text_counter( 'http://api.dribbble.com/' . $page_name));
 			
-		if( $dribbble == 0 && get_option( 'dribbble_count') )
-			$dribbble = get_option( 'dribbble_count');
+				$dribbble = $data->followers_count;
+			} catch (Exception $e) {
+				$dribbble = 0;
+			}
+
+			if( !empty($dribbble) ){
+				set_transient( 'dribbble_count' , $dribbble , 1200);
+				if( get_option( 'dribbble_count') != $dribbble )
+					update_option( 'dribbble_count' , $dribbble );
+			}
 				
-		elseif( $dribbble == 0 && !get_option( 'dribbble_count') )
-			$dribbble = 0;
-			
+			if( $dribbble == 0 && get_option( 'dribbble_count') )
+				$dribbble = get_option( 'dribbble_count');
+					
+			elseif( $dribbble == 0 && !get_option( 'dribbble_count') )
+				$dribbble = 0;
+		}
 		return $dribbble;
 	}
 
@@ -1756,4 +1779,40 @@ function tie_fix_shortcodes($content){
 }
 add_filter('the_content', 'tie_fix_shortcodes');
 
+
+/*-----------------------------------------------------------------------------------*/
+# Check if the current page is wp-login.php or wp-register.php
+/*-----------------------------------------------------------------------------------*/
+function tie_is_login_page() {
+    return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+# WP 3.6.0
+/*-----------------------------------------------------------------------------------*/
+// For old theme versions Video shortcode
+function tie_video_fix_shortcodes($content){   
+	$v = '/(\[(video)\s?.*?\])(.+?)(\[(\/video)\])/';
+	$content = preg_replace( $v , '[embed]$3[/embed]' , $content);
+    return $content;
+}
+add_filter('the_content', 'tie_video_fix_shortcodes', 0);
+
+//To prevent wordpress from importing mediaelement css file
+function tie_audio_video_shortcode(){
+	if( !is_admin()){
+		wp_enqueue_script( 'wp-mediaelement' );
+		return false;
+	}
+}
+add_filter('wp_audio_shortcode_library', 'tie_audio_video_shortcode');
+add_filter('wp_video_shortcode_library', 'tie_audio_video_shortcode');
+
+//Responsive Videos
+function tie_video_width_shortcode( $html ){
+	$width1 = 'width: 100%';
+	return preg_replace('/width: ([0-9]*)px/',$width1,$html);
+}
+add_filter('wp_video_shortcode', 'tie_video_width_shortcode');
 ?>

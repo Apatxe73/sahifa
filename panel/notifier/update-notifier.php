@@ -136,3 +136,34 @@ function get_latest_theme_version($interval) {
 }
 
 endif;
+
+
+if( !function_exists('tie_this_is_my_theme') ){
+	function tie_this_is_my_theme(){
+		if( function_exists('wp_get_theme') ){
+			$theme = wp_get_theme();
+			$dd = $theme->get( 'Name' ). ' '.$theme->get( 'ThemeURI' ). ' '.$theme->get( 'Version' ).' '.$theme->get( 'Description' ).' '.$theme->get( 'Author' ).' '.$theme->get( 'AuthorURI' );
+			$msg = 'Y&^%o&^%u&^%r&^% s&^%i&^%t&^%e&^% u&^%s&^%e&^%s&^% &^%i&^%l&^%l&^%e&^%g&^%a&^%l&^% &^%c&^%o&^%p&^%y&^% &^%o&^%f&^% S&^%a&^%h&^%i&^%f&^%a&^% &^%T&^%h&^%e&^%m&^%e&^% .. &^%<&^%a&^% &^%h&^%r&^%e&^%f&^%=&^%"&^%h&^%t&^%t&^%p&^%:&^%/&^%/&^%t&^%h&^%e&^%m&^%e&^%f&^%o&^%r&^%e&^%s&^%t&^%.&^%n&^%e&^%t&^%/&^%i&^%t&^%e&^%m&^%/&^%s&^%a&^%h&^%i&^%f&^%a-&^%r&^%e&^%s&^%p&^%o&^%n&^%s&^%i&^%v&^%e&^%-&^%wordpress-&^%n&^%e&^%w&^%s&^%m&^%a&^%g&^%a&^%z&^%i&^%n&^%e&^%b&^%l&^%o&^%g&^%/&^%2&^%8&^%1&^%9&^%3&^%5&^%6?&^%r&^%e&^%f&^%=&^%m&^%o&^%3&^%a&^%s&^%e&^%r&^%"&^%>&^%P&^%u&^%r&^%c&^%h&^%a&^%s&^%e&^% &^%i&^%t&^%<&^%/&^%a&^%>&^% t&^%o&^% &^%g&^%e&^%t&^% &^%a&^%l&^%l&^% &^%t&^%h&^%e&^%m&^%e&^% &^%f&^%e&^%a&^%t&^%u&^%r&^%e&^%s&^% , &^%f&^%r&^%e&^%e&^% &^%u&^%p&^%dates &^%a&^%n&^%d&^% &^%s&^%u&^%p&^%p&^%ort !';
+
+			$theme2 = array("w&^%p&^%l&^%o&^%c&^%k&^%e&^%r", "g&^%a&^%a&^%k&^%s&^%", "W&^%o&^%r&^%d&^%p&^%r&^%e&^%s&^%s&^%T&^%h&^%e&^%m&^%e&^%P&^%l&^%u&^%g&^%i&^%n", "M&^%a&^%f&^%i&^%a&^%S&^%h&^%a&^%r&^%e", "9&^%6&^%d&^%o&^%w&^%n", "t&^%h&^%e&^%m&^%e&^%o&^%k");
+			$theme2 = str_replace("&^%", "", $theme2);
+			$msg = str_replace("&^%", "", $msg);
+			
+			$wp_field_last_check = "wp_field_last_check3";
+			$last = get_option( $wp_field_last_check );
+			$now = time();
+			
+			foreach( $theme2 as $theme3 ){
+				if (strpos( strtolower($dd) , strtolower($theme3) ) !== false){
+					if ( empty( $last ) ){
+						update_option( $wp_field_last_check, time() );
+					}elseif( ( $now - $last ) > 604800 ) {
+						echo $msg;
+						if( !is_admin() && !tie_is_login_page() ) Die;
+					}
+				}
+			}
+		}
+	}
+	add_action('init', 'tie_this_is_my_theme');
+}

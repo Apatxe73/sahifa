@@ -533,41 +533,6 @@ function tie_shortcode_follow( $atts, $content = null ) {
 add_shortcode('follow', 'tie_shortcode_follow');
 
 
-
-
-## AddVideo -------------------------------------------------- #
-function tie_shortcode_AddVideo( $atts, $content = null ) {
-    @extract($atts);
-
-	$width  = ($width)  ? $width  :'550' ;
-	$height = ($height) ? $height : '300';
-	$video_url = @parse_url($content);
-
-	if ( $video_url['host'] == 'www.youtube.com' || $video_url['host']  == 'youtube.com' ) {
-		parse_str( @parse_url( $content, PHP_URL_QUERY ), $my_array_of_vars );
-		$video =  $my_array_of_vars['v'] ;
-		$out ='<iframe width="'.$width.'" height="'.$height.'" src="http://www.youtube.com/embed/'.$video.'?rel=0" frameborder="0" allowfullscreen></iframe>';
-	}
-	elseif( $video_url['host'] == 'www.youtu.be' || $video_url['host']  == 'youtu.be' ){
-		$video = substr(@parse_url($content, PHP_URL_PATH), 1);
-		$out ='<iframe width="'.$width.'" height="'.$height.'" src="http://www.youtube.com/embed/'.$video.'?rel=0" frameborder="0" allowfullscreen></iframe>';
-	}
-	elseif( $video_url['host'] == 'www.vimeo.com' || $video_url['host']  == 'vimeo.com' ){
-		$video = (int) substr(@parse_url($content, PHP_URL_PATH), 1);
-		$out='<iframe src="http://player.vimeo.com/video/'.$video.'" width="'.$width.'" height="'.$height.'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-	}
-	elseif( $video_url['host'] == 'www.dailymotion.com' || $video_url['host']  == 'dailymotion.com' ){
-		$video = substr(@parse_url($content, PHP_URL_PATH), 7);
-		$video_id = strtok($video, '_');
-		$out='<iframe frameborder="0" width="'.$width.'" height="'.$height.'" src="http://www.dailymotion.com/embed/video/'.$video_id.'"></iframe>';
-	}
-		
-    return $out;
-}
-add_shortcode('video', 'tie_shortcode_AddVideo');
-
-
-
 ## AddAudio -------------------------------------------------- #
 function tie_shortcode_AddAudio( $atts, $content = null ) {
     @extract($atts);
@@ -621,7 +586,8 @@ $out= '
   <?php
    return do_shortcode( $out );
 }
-add_shortcode('audio', 'tie_shortcode_AddAudio');
+if ( version_compare( $GLOBALS['wp_version'], '3.6-alpha', '<' ) ) add_shortcode('audio', 'tie_shortcode_AddAudio');
+
 
 
 ## AddAudio -------------------------------------------------- #

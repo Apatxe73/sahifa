@@ -698,16 +698,16 @@ if( $page == 'box' ){
 				var height = jQuery('#height').val();
 
 
-				var output = '[video ';
+				var output = '[embed';
 				
 				if(width) {
-					output += 'width="'+width+'" ';
+					output += ' width="'+width+'" ';
 				}
 				if(height) {
-					output += 'height="'+height+'" ';
+					output += ' height="'+height+'" ';
 				}
 
-				output += ']'+ VideoUrl + '[/video]';
+				output += ']'+ VideoUrl + '[/embed]';
 				tinyMCEPopup.execCommand('mceReplaceContent', false, output);
 				tinyMCEPopup.close();
 				

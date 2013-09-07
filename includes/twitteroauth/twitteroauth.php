@@ -59,7 +59,11 @@ class TwitterOAuth {
    * construct TwitterOAuth object
    */
   function __construct($consumer_key, $consumer_secret, $oauth_token = NULL, $oauth_token_secret = NULL) {
-    $this->sha1_method = new OAuthSignatureMethod_HMAC_SHA1();
+	if (class_exists('OAuthSignatureMethod_HMAC_SHA1')) {
+		$this->sha1_method = new OAuthSignatureMethod_HMAC_SHA1();
+	}else{
+		echo '<!-- OAuthSignatureMethod_HMAC_SHA1 NOT FOUND -->';
+	}
     $this->consumer = new OAuthConsumer($consumer_key, $consumer_secret);
     if (!empty($oauth_token) && !empty($oauth_token_secret)) {
       $this->token = new OAuthConsumer($oauth_token, $oauth_token_secret);

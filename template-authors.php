@@ -28,6 +28,7 @@ Template Name: Authors List
 		?>
 		
 		<article class="post-listing post">
+			<?php tie_include( 'post-head' ); // Get Post Head template ?>
 			<div class="post-inner">
 				<h1 class="post-title"><?php the_title(); ?></h1>
 				<p class="post-meta"></p>

@@ -176,20 +176,24 @@ function tie_wp_head() {
 <style type="text/css" media="screen"> 
 <?php echo "\n"; ?>
 <?php if( tie_get_option('background_type') == 'pattern' ):
-	if(tie_get_option('background_pattern') ): ?>
-body {background: <?php echo tie_get_option('background_pattern_color') ?> url(<?php echo get_template_directory_uri(); ?>/images/patterns/<?php echo tie_get_option('background_pattern') ?>.png) center;}
+	if( tie_get_option('background_pattern') || tie_get_option('background_pattern_color') ): ?>
+body {
+<?php if( tie_get_option('background_pattern_color') ){ ?> background-color: <?php echo tie_get_option('background_pattern_color') ?> !important; <?php } ?>
+<?php if( tie_get_option('background_pattern') ){ ?> background-image : url(<?php echo get_template_directory_uri(); ?>/images/patterns/<?php echo tie_get_option('background_pattern') ?>.png);<?php } ?>
+background-position: top center;
+}
 	<?php endif; ?>
 <?php elseif( tie_get_option('background_type') == 'custom' ):
 	$bg = tie_get_option( 'background' ); 
 	if( tie_get_option('background_full') ): ?>
 .background-cover{<?php echo "\n"; ?>
-	background-color:<?php echo $bg['color'] ?>;
-	background-image : url('<?php echo $bg['img'] ?>') ;<?php echo "\n"; ?>
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo $bg['img'] ?>',sizingMethod='scale');<?php echo "\n"; ?>
-	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo $bg['img'] ?>',sizingMethod='scale')";<?php echo "\n"; ?>
+	background-color:<?php echo $bg['color'] ?> !important;
+	background-image : url('<?php echo $bg['img'] ?>') !important;<?php echo "\n"; ?>
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo $bg['img'] ?>',sizingMethod='scale') !important;<?php echo "\n"; ?>
+	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='<?php echo $bg['img'] ?>',sizingMethod='scale')" !important;<?php echo "\n"; ?>
 }
 <?php else: ?>
-body{background:<?php echo $bg['color'] ?> url('<?php echo $bg['img'] ?>') <?php echo $bg['repeat'] ?> <?php echo $bg['attachment'] ?> <?php echo $bg['hor'] ?> <?php echo $bg['ver'] ?>;}<?php echo "\n"; ?>
+body{background:<?php echo $bg['color'] ?> url('<?php echo $bg['img'] ?>') <?php echo $bg['repeat'] ?> <?php echo $bg['attachment'] ?> <?php echo $bg['hor'] ?> <?php echo $bg['ver'] ?>!important;}<?php echo "\n"; ?>
 <?php endif; ?>
 <?php endif; ?>
 <?php
